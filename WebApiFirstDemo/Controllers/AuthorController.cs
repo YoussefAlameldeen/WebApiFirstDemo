@@ -13,7 +13,7 @@ namespace WebApiFirstDemo.Controllers
 
         public AuthorController(IAuthorRepo authorRepo)
         {
-            _authorRepo=authorRepo;
+            _authorRepo = authorRepo;
         }
 
         //[HttpPost ("AddAuthor")]
@@ -24,10 +24,17 @@ namespace WebApiFirstDemo.Controllers
         //}
 
         [HttpPost("AddAuthorBook")]
-        public IActionResult AddAuthorBook(AuthorDto authorDto)
+        public IActionResult AddAuthorBook(AuthorDto authorDto, string bookkit)
         {
-            _authorRepo.AddAuthorBook(authorDto);
+            _authorRepo.AddAuthorBook(authorDto, bookkit);
             return Ok();
+        }
+
+        [HttpPut ("{Id},UpdateAuthorBookId")]
+        public IActionResult UpdateAuthorBook(AuthorDto authorDto, string authname)
+        {
+            _authorRepo.UpdateAuthor(authorDto, authname);   
+            return Ok();   
         }
 
     }

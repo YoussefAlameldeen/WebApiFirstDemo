@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApiFirstDemo.ApplicationDbContext;
 using WebApiFirstDemo.Dto;
 using WebApiFirstDemo.Model;
@@ -29,6 +30,12 @@ namespace WebApiFirstDemo.Repositories.AuthorRepository
 
         public void AddAuthorBook(AuthorDto authorDto , string booktit)
         {
+            if (string.IsNullOrEmpty(authorDto.AuthorEmail))
+            {
+                throw new ArgumentException("Email is required", nameof(authorDto.AuthorEmail));
+            }
+
+
             var book = _context.Books.FirstOrDefault(i => i.BookTitle == booktit);
             if(book != null)
             {
@@ -49,5 +56,37 @@ namespace WebApiFirstDemo.Repositories.AuthorRepository
             _context.Authors.Add(newAuthor);
             _context.SaveChanges();
         }
+        public AuthorDto GetAuthorBookByName(string authorName)
+        {
+            var auth = _context.Authors
+                .Include(a => a.Book) 
+                .Where(a => a.AuthorName == authorName)
+                .Select(a => new AuthorDto
+                {
+                    AuthorName = a.AuthorName,
+                    BookDtos = a.Book.Select(b => new BookDto
+                    {
+                        BookTitle = b.BookTitle,
+                    }).ToList()
+                })
+                .FirstOrDefault();
+
+            return auth;
+        }
+
+        public void UpdateAuthor(AuthorDto authordto , string authname) //match by id for uniquness
+        {
+            var auth = _context.Authors.Include(i=>i.Book).FirstOrDefault(i => i.AuthorName == authname);
+            auth.AuthorName= authordto.AuthorName;
+
+            auth.Book = authordto.BookDtos.Select(i => new Book
+            {
+                BookTitle = i.BookTitle,
+            }).ToList();
+            _context.Authors.Update(auth);
+           
+            _context.SaveChanges();
+        }
+
     }
 }
