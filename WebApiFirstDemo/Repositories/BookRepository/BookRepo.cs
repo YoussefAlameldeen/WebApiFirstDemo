@@ -1,7 +1,7 @@
-﻿namespace WebApiFirstDemo.Repositories.BookRepository
-{
-    public interface BookRepo
-    {
-        public Add
-    }
-}
+﻿//namespace WebApiFirstDemo.Repositories.BookRepository
+//{
+//    public interface BookRepo
+//    {
+//        public Add
+//    }
+//}

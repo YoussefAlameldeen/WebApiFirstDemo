@@ -7,7 +7,6 @@ namespace WebApiFirstDemo.Dto
     {
         [Required]
         public string AuthorName { get; set; }
-        [EmailAddress]
         public string AuthorEmail { get; set; }
         [Phone]
         public string PhoneNumber { get; set; }
